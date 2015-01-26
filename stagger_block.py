@@ -25,7 +25,7 @@ class Stagger(Block):
         visible=False,
         default=timedelta(microseconds=100000))
 
-    def process_signals(self, signals, input_group=None):
+    def process_signals(self, signals, input_id=None):
         stagger_period = self._get_stagger_period(len(signals))
         self._logger.debug("{} signals received, notifying every {}".format(
             len(signals), stagger_period))
@@ -34,7 +34,6 @@ class Stagger(Block):
         # sleep between notifications
         spawn(self._do_notification, StaggerData(
             stagger_period, math.ceil(self.period / stagger_period), signals))
-
 
     def _get_stagger_period(self, num_signals):
         """ Returns the stagger period based on a number of signals """
@@ -47,6 +46,7 @@ class Stagger(Block):
             self._logger.debug("Notifying {} signals".format(len(sigs_out)))
             self.notify_signals(sigs_out)
             sleep(stagger_data.interval.total_seconds())
+
 
 class StaggerData(object):
 
