@@ -2,13 +2,13 @@ from datetime import timedelta
 from collections import deque
 from time import sleep
 import math
-from nio.common.discovery import Discoverable, DiscoverableType
-from nio.common.block.base import Block
-from nio.metadata.properties import TimeDeltaProperty
-from nio.modules.threading import spawn
+from nio.util.discovery import discoverable
+from nio.block.base import Block
+from nio.properties import TimeDeltaProperty
+from nio.util.threading.spawn import spawn
 
 
-@Discoverable(DiscoverableType.block)
+@discoverable
 class Stagger(Block):
 
     # How much we want to "spread out" the incoming signals
@@ -27,23 +27,23 @@ class Stagger(Block):
 
     def process_signals(self, signals, input_id=None):
         stagger_period = self._get_stagger_period(len(signals))
-        self._logger.debug("{} signals received, notifying every {}".format(
+        self.logger.debug("{} signals received, notifying every {}".format(
             len(signals), stagger_period))
 
         # Launch the notification mechanism in a new thread so that it can
         # sleep between notifications
         spawn(self._do_notification, StaggerData(
-            stagger_period, math.ceil(self.period / stagger_period), signals))
+            stagger_period, math.ceil(self.period() / stagger_period), signals))
 
     def _get_stagger_period(self, num_signals):
         """ Returns the stagger period based on a number of signals """
-        return max(self.period / num_signals, self.min_interval)
+        return max(self.period() / num_signals, self.min_interval())
 
     def _do_notification(self, stagger_data):
         """ Take a stagger data object and perform the signal notifications """
         while stagger_data.signals_deque:
             sigs_out = stagger_data.signals_deque.popleft()
-            self._logger.debug("Notifying {} signals".format(len(sigs_out)))
+            self.logger.debug("Notifying {} signals".format(len(sigs_out)))
             self.notify_signals(sigs_out)
             sleep(stagger_data.interval.total_seconds())
 

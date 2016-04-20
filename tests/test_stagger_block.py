@@ -1,7 +1,7 @@
 from ..stagger_block import Stagger, StaggerData
-from nio.common.signal.base import Signal
+from nio.signal.base import Signal
 from time import sleep
-from nio.util.support.block_test_case import NIOBlockTestCase
+from nio.testing.block_test_case import NIOBlockTestCase
 
 
 class TestStaggerBlock(NIOBlockTestCase):
