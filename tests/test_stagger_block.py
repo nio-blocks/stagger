@@ -1,7 +1,9 @@
-from ..stagger_block import Stagger, StaggerData
-from nio.signal.base import Signal
+from datetime import timedelta
 from time import sleep
+from unittest.mock import MagicMock
 from nio.testing.block_test_case import NIOBlockTestCase
+from nio.signal.base import Signal
+from ..stagger_block import Stagger, StaggerData
 
 
 class TestStaggerBlock(NIOBlockTestCase):
@@ -43,7 +45,11 @@ class TestStaggerBlock(NIOBlockTestCase):
         self.assertEqual(sd_3_1[2], [])
 
     def _get_stagger_deque(self, groups, num_sigs):
-        sd = StaggerData(None, groups, [i for i in range(num_sigs)])
+        sd = StaggerData(timedelta(seconds=60),
+                         groups,
+                         [i for i in range(num_sigs)],
+                         MagicMock(),
+                         MagicMock())
         return sd.signals_deque
 
     def test_stagger_block_normal(self):

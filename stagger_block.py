@@ -1,11 +1,12 @@
 from datetime import timedelta
 from collections import deque
+from copy import copy, deepcopy
 from time import sleep
 import math
 from nio.util.discovery import discoverable
 from nio.block.base import Block
 from nio.properties import TimeDeltaProperty
-from nio.util.threading.spawn import spawn
+from nio.modules.scheduler.job import Job
 
 
 @discoverable
@@ -32,36 +33,51 @@ class Stagger(Block):
 
         # Launch the notification mechanism in a new thread so that it can
         # sleep between notifications
-        spawn(self._do_notification, StaggerData(
-            stagger_period, math.ceil(self.period() / stagger_period), signals))
+        stagger_data = StaggerData(
+            stagger_period,
+            math.ceil(self.period() / stagger_period),
+            signals,
+            self.notify_signals,
+            self.logger,
+        )
+        stagger_data.start_notify()
 
     def _get_stagger_period(self, num_signals):
         """ Returns the stagger period based on a number of signals """
         return max(self.period() / num_signals, self.min_interval())
-
-    def _do_notification(self, stagger_data):
-        """ Take a stagger data object and perform the signal notifications """
-        while stagger_data.signals_deque:
-            sigs_out = stagger_data.signals_deque.popleft()
-            self.logger.debug("Notifying {} signals".format(len(sigs_out)))
-            self.notify_signals(sigs_out)
-            sleep(stagger_data.interval.total_seconds())
 
 
 class StaggerData(object):
 
     """ A class containing an interval and a stack of signals to notify """
 
-    interval = None
-    num_groups = None
-    signals = None
-    signals_deque = None
-
-    def __init__(self, interval, num_groups, signals):
+    def __init__(self, interval, num_groups, signals, notify_signals, logger):
         self.interval = interval
         self.num_groups = num_groups
-        self.signals = signals
+        try:
+            self.signals = deepcopy(signals)
+        except:
+            self.signals = copy(signals)
+        self.notify_signals = notify_signals
+        self.logger = logger
         self._build_deque()
+
+    def start_notify(self):
+        # Notify the first signals right away
+        self._notify()
+        # Repeat notify every interval until cancelled
+        self._notify_job = Job(
+            self._notify,
+            timedelta(seconds=self.interval.total_seconds()),
+            True)
+
+    def _notify(self):
+        if not self.signals_deque:
+            self._notify_job.cancel()
+        else:
+            sigs_out = self.signals_deque.popleft()
+            self.logger.debug("Notifying {} signals".format(len(sigs_out)))
+            self.notify_signals(sigs_out)
 
     def _build_deque(self):
         """ Build the stack of signals based on number of groups we want """
