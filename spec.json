@@ -1,19 +1,10 @@
 {
-    "nio/Stagger": {
-        "Category": "PathModifier",
-        "Commands": {},
-        "Properties": {
-            "period": {
-                "description": "Period of time over which to emit signals"
-            }
-        },
-        "Input": {
-            "Description": "Any group/list of signals"
-        },
-        "Version": "1.0.0",
-        "Description": "Stagger the notification of incoming signals over a period of time.\nThis block is often useful after a block like the [Queue](https://github.com/nio-blocks/queue) block that emits signals in groups. If, for visualization purposes, you don't want to see the chunks that another block notifies, you can place a stagger block after it and it will \"smooth\" out the delivery of signals.",
-        "Output": {
-            "Description": "The same signals, only one-by-one, and in a staggered fashion. All incoming signals are guaranteed to be notified out of this block."
-        }
-    }
+  "nio/Stagger": {
+    "version": "0.0.1",
+    "description": "",
+    "inputs": {},
+    "outputs": {},
+    "properties": {},
+    "commands": {}
+  }
 }
