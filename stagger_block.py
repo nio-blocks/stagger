@@ -1,30 +1,22 @@
-from datetime import timedelta
 from collections import deque
 from copy import copy, deepcopy
-from time import sleep
+from datetime import timedelta
 import math
-from nio.util.discovery import discoverable
+from time import sleep
+
 from nio.block.base import Block
-from nio.properties import TimeDeltaProperty
+from nio.properties import TimeDeltaProperty, VersionProperty
 from nio.modules.scheduler.job import Job
 
 
-@discoverable
 class Stagger(Block):
 
-    # How much we want to "spread out" the incoming signals
-    period = TimeDeltaProperty(title='Period', default=timedelta(seconds=1))
-
-    # This is the minimum interval we will emit signals. If a large number of
-    # signals comes through, we don't necessarily want to notify them one by
-    # one anymore, but rather in many small groups. This is the interval that
-    # those small groups will be notified.
-    #
-    # Defaults to 100 milliseconds (10 notifications per second)
+    version = VersionProperty("1.0.0")
+    period = TimeDeltaProperty(title='Period', default={"seconds": 1})
     min_interval = TimeDeltaProperty(
         title='Minimum Interval',
         visible=False,
-        default=timedelta(microseconds=100000))
+        default={"microseconds": 100000})
 
     def process_signals(self, signals, input_id=None):
         stagger_period = self._get_stagger_period(len(signals))

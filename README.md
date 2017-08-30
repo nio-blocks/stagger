@@ -1,28 +1,25 @@
 Stagger
 =======
-
-Stagger the notification of incoming signals over a period of time.
-
-This block is often useful after a block like the [Queue](https://github.com/nio-blocks/queue) block that emits signals in groups. If, for visualization purposes, you don't want to see the chunks that another block notifies, you can place a stagger block after it and it will "smooth" out the delivery of signals.
+Split a list of signals and emit the pieces evenly over the configured period.
 
 Properties
---------------
+----------
+- **min_interval**: If the number of signals and the *Period* would cause signals to emit more often than this time period, then group signals into lists so that signals are emitted this often.
+- **period**: Time period to spread out the incoming signals.
 
--   **period**: Period of time over which to emit signals
+Inputs
+------
+- **default**: Any list of signals.
 
-Dependencies
-----------------
-
-None
+Outputs
+-------
+- **default**: Signals split and emitted over the *Period*.
 
 Commands
-----------------
+--------
 None
 
-Input
--------
-Any group/list of signals
+Dependencies
+------------
+None
 
-Output
----------
-The same signals, only one-by-one, and in a staggered fashion. All incoming signals are guaranteed to be notified out of this block.

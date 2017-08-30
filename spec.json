@@ -1,10 +1,35 @@
 {
   "nio/Stagger": {
-    "version": "0.0.1",
-    "description": "",
-    "inputs": {},
-    "outputs": {},
-    "properties": {},
+    "version": "1.0.0",
+    "description": "Split a list of signals and emit the pieces evenly over the configured period.",
+    "properties": {
+      "min_interval": {
+        "title": "Minimum Interval",
+        "type": "TimeDeltaType",
+        "description": "If the number of signals and the *Period* would cause signals to emit more often than this time period, then group signals into lists so that signals are emitted this often.",
+        "default": {
+          "microseconds": 100000
+        }
+      },
+      "period": {
+        "title": "Period",
+        "type": "TimeDeltaType",
+        "description": "Time period to spread out the incoming signals.",
+        "default": {
+          "seconds": 1
+        }
+      }
+    },
+    "inputs": {
+      "default": {
+        "description": "Any list of signals."
+      }
+    },
+    "outputs": {
+      "default": {
+        "description": "Signals split and emitted over the *Period*."
+      }
+    },
     "commands": {}
   }
 }
