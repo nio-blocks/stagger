@@ -1,12 +1,14 @@
 from datetime import timedelta
 from time import sleep
 from unittest.mock import MagicMock
+from unittest import TestCase
+
 from nio.testing.block_test_case import NIOBlockTestCase
 from nio.signal.base import Signal
 from ..stagger_block import Stagger, StaggerData
 
 
-class TestStaggerBlock(NIOBlockTestCase):
+class TestStaggerData(TestCase):
 
     def test_stagger_data_5_3(self):
         """ 5 signals over 3 groups
@@ -51,6 +53,9 @@ class TestStaggerBlock(NIOBlockTestCase):
                          MagicMock(),
                          MagicMock())
         return sd.signals_deque
+
+
+class TestStaggerBlock(NIOBlockTestCase):
 
     def test_stagger_block_normal(self):
         """ Assert signals get notified in a staggered fashion """
