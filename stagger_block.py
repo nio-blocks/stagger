@@ -2,7 +2,6 @@ from collections import deque
 from copy import copy, deepcopy
 from datetime import timedelta
 import math
-from time import sleep
 
 from nio.block.base import Block
 from nio.properties import TimeDeltaProperty, VersionProperty
