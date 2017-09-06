@@ -2,6 +2,10 @@
   "nio/Stagger": {
     "version": "1.0.0",
     "description": "Split a list of signals and emit the pieces evenly over the configured period.",
+    "categories": [
+      "Signal Flow",
+      "Signal Modifier"
+    ],
     "properties": {
       "min_interval": {
         "title": "Minimum Interval",
