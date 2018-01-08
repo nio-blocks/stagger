@@ -1,7 +1,7 @@
 {
   "nio/Stagger": {
     "version": "1.0.0",
-    "description": "Split a list of signals and emit the pieces evenly over the configured period.",
+    "description": "The Stagger block splits a list of signals into individual one-item lists and emits each one evenly over the configured period.",
     "categories": [
       "Signal Flow",
       "Signal Modifier"
@@ -10,7 +10,7 @@
       "min_interval": {
         "title": "Minimum Interval",
         "type": "TimeDeltaType",
-        "description": "If the number of signals and the *Period* would cause signals to emit more often than this time period, then group signals into lists so that signals are emitted this often.",
+        "description": "If the number of signals and the *Period* would cause signals to emit more often than this time period, then group signals into lists with multiple items so that signals are emitted on this minimum interval.",
         "default": {
           "microseconds": 100000
         }
