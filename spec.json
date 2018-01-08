@@ -1,6 +1,6 @@
 {
   "nio/Stagger": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "The Stagger block splits a list of signals into individual one-item lists and emits each one evenly over the configured period.",
     "categories": [
       "Signal Flow",

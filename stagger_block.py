@@ -10,7 +10,7 @@ from nio.modules.scheduler.job import Job
 
 class Stagger(Block):
 
-    version = VersionProperty("1.0.0")
+    version = VersionProperty("1.0.1")
     period = TimeDeltaProperty(title='Period', default={"seconds": 1})
     min_interval = TimeDeltaProperty(
         title='Minimum Interval',
