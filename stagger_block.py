@@ -14,7 +14,7 @@ class Stagger(Block):
     period = TimeDeltaProperty(title='Period', default={"seconds": 1})
     min_interval = TimeDeltaProperty(
         title='Minimum Interval',
-        visible=False,
+        advanced=True,
         default={"microseconds": 100000})
 
     def process_signals(self, signals, input_id=None):
